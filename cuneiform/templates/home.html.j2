@@ -2,6 +2,10 @@
 {% block content %}
 
   <h1>Welcome to Cuneiform, script your needs.</h1>
-  <p>Please select one of the links from the nav bar.</p>
+  {% if current_user.is_authenticated %}
+  <p>Hi {{current_user.username}}</p>
+  {% else %}
+  <p>Please login or register</p>
+  {% endif %}
 
 {% endblock %}
