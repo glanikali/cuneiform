@@ -1,0 +1,14 @@
+{% extends "base.html.j2" %}
+{% block content %}
+
+  <h1>Need some supplies??</h1>
+  <p>Add a new puppy with the form below:</p>
+  <form method="POST">
+      {# This hidden_tag is a CSRF security feature. #}
+      {{ form.hidden_tag() }}
+      {{ form.name.label }} {{ form.name() }}
+      {{ form.user_id.label }} {{ form.user_id() }}<br>
+      {{ form.submit() }}
+  </form>
+
+{% endblock %}
