@@ -1,14 +1,17 @@
 {% extends "base.html.j2" %}
-{% block content %}
 
+{% block title %} Add Item  {% endblock %}
+
+{% block content %}
+<div class="d-block p-2 bg-light">
   <h1>Need some supplies??</h1>
-  <p>Add a new puppy with the form below:</p>
-  <form method="POST">
+  <p>Add a new item with the form below:</p>
+  <form action="{{url_for('items.store')}}" method="POST">
       {# This hidden_tag is a CSRF security feature. #}
       {{ form.hidden_tag() }}
       {{ form.name.label }} {{ form.name() }}
-      {{ form.user_id.label }} {{ form.user_id() }}<br>
+      {{ form.user_id.label }} {{ form.user_id()}}<br>
       {{ form.submit() }}
   </form>
-
+</div>
 {% endblock %}

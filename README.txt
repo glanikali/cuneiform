@@ -23,3 +23,5 @@ flask db migrate -m "message"
 - note to drop columns in SQLite it is a bit more nuanced
 - 	- have to edit the migration script actually
 	- https://www.youtube.com/watch?v=CxCK1DkikgA&ab_channel=PrettyPrinted
+
+flask db upgrade

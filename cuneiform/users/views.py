@@ -60,7 +60,7 @@ def register():
             flash("Thanks for registration!")
             return redirect(url_for('users.login'))
 
-        # if username or email are not unique    
+        # if username or email are not unique
         except IntegrityError:
             db.session.rollback()
             flash("User or Email already exists")

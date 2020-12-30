@@ -1,5 +1,9 @@
 {% extends "base.html.j2" %}
+
+{% block title %} Login  {% endblock %}
+
 {% block content %}
+<div class="d-block p-2 bg-light">
 <form method="POST">
     {# This hidden_tag is a CSRF security feature. #}
     {{ form.hidden_tag() }}
@@ -7,4 +11,5 @@
     {{ form.password.label }} {{ form.password() }}
     {{ form.submit() }}
 </form>
+</div>
 {% endblock %}

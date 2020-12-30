@@ -1,5 +1,9 @@
 {% extends "base.html.j2" %}
+
+{% block title %} Cuneiform {% endblock %}
+
 {% block content %}
+<div class="d-block p-2 bg-light">
 
   <h1>Welcome to Cuneiform, script your needs.</h1>
   {% if current_user.is_authenticated %}
@@ -7,5 +11,5 @@
   {% else %}
   <p>Please login or register</p>
   {% endif %}
-
+</div>
 {% endblock %}

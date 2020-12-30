@@ -1,11 +1,16 @@
 {% extends "base.html.j2" %}
-{% block content %}
 
+{% block title %} Show List {% endblock %}
+
+{% block content %}
+<div class="d-block p-2 bg-light">
   <h1>Here is a list of supplies we need.</h1>
   <ul>
     {% for item in items  %}
-    <li>{{item}}</li>
+    <li> <a href="{{url_for('items.edit',id=item.id)}}">{{item}}</a> </li>
     {% endfor %}
   </ul>
 
 {% endblock %}
+</div>
+items/id/edit

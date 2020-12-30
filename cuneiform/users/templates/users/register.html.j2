@@ -1,6 +1,9 @@
 {% extends "base.html.j2" %}
-{% block content %}
 
+{% block title %} Register {% endblock %}
+
+{% block content %}
+<div class="d-block p-2 bg-light">
 {% for mess in get_flashed_messages()  %}
 
 <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -19,4 +22,5 @@
     {{ form.pass_confirm.label }} {{ form.pass_confirm() }}<br>
     {{ form.submit() }}
 </form>
+</div>
 {% endblock %}
