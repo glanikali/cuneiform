@@ -55,8 +55,8 @@ def index():
     # Grab a list of puppies from database.
     add_form = AddForm()
     update_form = UpdateForm()
-    items = Item.query.filter_by(user_id=current_user.id)
-
+    #items = Item.query.filter_by(user_id=current_user.id)
+    items = db.session.query(User,Item).filter(User.id == Item.user_id,Item.user_id==current_user.id).all()
     return render_template('items_list.html.j2', items=items, add_form=add_form, update_form=update_form)
 
 
