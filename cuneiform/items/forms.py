@@ -10,7 +10,7 @@ class UpdateForm(FlaskForm):
 
     #id = IntegerField('Id of Item to Buy:')
     name = StringField('Name of Item:')
-    submit = SubmitField('Buy Item')
+    submit = SubmitField('Update')
 
 class AddForm(FlaskForm):
 

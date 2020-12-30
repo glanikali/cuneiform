@@ -1,10 +1,10 @@
 # cuneiform/users/items.py
 
-from flask import Blueprint, render_template, redirect, url_for, request
-from cuneiform import db
-from cuneiform.models import Item
+from flask import Blueprint, render_template, redirect, url_for, request, flash
+from cuneiform import db, login_manager
+from cuneiform.models import Item, User
 from cuneiform.items.forms import AddForm, UpdateForm
-
+from flask_login import current_user
 items_blueprint = Blueprint('items', __name__,
                             template_folder='templates/items')
 
@@ -40,7 +40,7 @@ def store():
     #
     name = request.form['name']
     #is_bought = request.form['is_bought']
-    user_id = request.form['user_id']
+    user_id = current_user.id
     # Add new item to database
     new_item = Item(name,user_id)
     db.session.add(new_item)
@@ -53,8 +53,12 @@ def store():
 @items_blueprint.route('')
 def index():
     # Grab a list of puppies from database.
-    items = Item.query.all()
-    return render_template('list_items.html.j2', items=items)
+    add_form = AddForm()
+    update_form = UpdateForm()
+    items = Item.query.filter_by(user_id=current_user.id)
+    names = []
+    for item in items:
+    return render_template('items_list.html.j2', items=items, add_form=add_form, update_form=update_form)
 
 
 
@@ -69,9 +73,12 @@ def edit(id):
 @items_blueprint.route('/<id>/update', methods=['POST'])
 def update(id):
 
-    #id = form.id.data
+    #id = update_form.id.data
     item = Item.query.get(id)
-    item.is_bought = True
+    #item = Item.query.get(request.form.get('id'))
+    item.name = request.form['name']
+    #item.is_bought = True
     db.session.commit()
+    flash("Item Updated Successfully")
 
     return redirect(url_for('items.index'))
