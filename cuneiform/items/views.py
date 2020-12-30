@@ -56,8 +56,7 @@ def index():
     add_form = AddForm()
     update_form = UpdateForm()
     items = Item.query.filter_by(user_id=current_user.id)
-    names = []
-    for item in items:
+
     return render_template('items_list.html.j2', items=items, add_form=add_form, update_form=update_form)
 
 
