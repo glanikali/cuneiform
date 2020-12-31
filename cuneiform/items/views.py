@@ -3,7 +3,7 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash
 from cuneiform import db, login_manager
 from cuneiform.models import Item, User
-from cuneiform.items.forms import AddForm, UpdateForm
+from cuneiform.items.forms import AddForm, UpdateNameForm, UpdateStatusForm, UpdateForm
 from flask_login import current_user
 items_blueprint = Blueprint('items', __name__,
                             template_folder='templates/items')
@@ -54,10 +54,13 @@ def store():
 def index():
     # Grab a list of puppies from database.
     add_form = AddForm()
-    update_form = UpdateForm()
+    update_name_form = UpdateNameForm()
+    update_status_form = UpdateStatusForm()
     #items = Item.query.filter_by(user_id=current_user.id)
     items = db.session.query(User,Item).filter(User.id == Item.user_id,Item.user_id==current_user.id).all()
-    return render_template('items_list.html.j2', items=items, add_form=add_form, update_form=update_form)
+    return render_template('items_list.html.j2', items=items,
+                            add_form=add_form, update_name_form=update_name_form,
+                            update_status_form=update_status_form)
 
 
 
@@ -72,10 +75,29 @@ def edit(id):
 @items_blueprint.route('/<id>/update', methods=['POST'])
 def update(id):
 
-    #id = update_form.id.data
+    #update_form = UpdateForm()
+    update_name_form = UpdateNameForm()
+    update_status_form = UpdateStatusForm()
+    #print(update_status_form.fields)
+    #print(update_name_form.fields)
+    #id = update_status_form.id.data
     item = Item.query.get(id)
+
+    print(f"in update id: {id}  ")
+    print(f"{request.form}")
+    print(update_status_form.validate_on_submit())
+    if 'is_bought' in request.form and update_status_form.validate_on_submit():
+        print("setting bought")
+        item.is_bought = True
+
+    #id = update_form.id.data
+
+    elif update_name_form.validate_on_submit():
+        print("updating name")
+        item.name = request.form['name']
+
     #item = Item.query.get(request.form.get('id'))
-    item.name = request.form['name']
+
     #item.is_bought = True
     db.session.commit()
     flash("Item Updated Successfully")
