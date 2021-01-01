@@ -12,10 +12,16 @@ class User(db.Model,UserMixin):
 
     __tablename__ = 'users'
 
+    username_min_len, username_max_len = 3, 64
+    email_min_len, email_max_len = 3, 254
+    pass_min_len, pass_max_len = 6, 64
+    pass_hash_len = 128
+
+
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(64), unique=True, index=True)
-    username = db.Column(db.String(64), unique=True, index=True)
-    password_hash = db.Column(db.String(128))
+    email = db.Column(db.String(email_max_len), unique=True, index=True)
+    username = db.Column(db.String(username_max_len), unique=True, index=True)
+    password_hash = db.Column(db.String(pass_hash_len))
 
     #email TO DO
     #username TO DO
@@ -40,8 +46,10 @@ class Item(db.Model):
 
     __tablename__ = 'items'
 
+    name_min_len, name_max_len = 3, 64
+
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.Text)
+    name = db.Column(db.String(name_max_len))
     is_bought = db.Column(db.Boolean)
     #is_bought = db.Column(db.Boolean)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
