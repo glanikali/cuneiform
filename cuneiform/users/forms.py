@@ -2,24 +2,66 @@
 from cuneiform.models import User
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField,PasswordField
-from wtforms.validators import DataRequired, Email, EqualTo
+from wtforms.validators import InputRequired, Email, EqualTo, Length
 from wtforms import ValidationError
+
+def appropriate_credentials(form,field):
+    '''Checks username/password '''
+
+    password = field.data
+    email = form.email.data
+
+    user = User.query.filter_by(email=self.email.data).first()
+    # Check username is valid
+
+    if user is None:
+        raise ValidationError("Username or password is incorrect")
+
+    # Check password is valid
+    if not user.check_password(password):
+        raise ValidationError("Username or password is incorrect")
 
 
 class LoginForm(FlaskForm):
-    email = StringField('Email', validators=[DataRequired(),Email()])
-    password = PasswordField('Password', validators=[DataRequired()])
+    email = StringField('Email', validators=[InputRequired(message="Email required"),
+                                            Email()])
+    password = PasswordField('Password', validators=[InputRequired(message="Password required")])
     submit = SubmitField("Log in")
+
+
+    # check if password is valid
+    def validate_password(self,field):
+        password = field.data
+        user = User.query.filter_by(email=self.email.data).first()
+        # if user doesnt exist password is incorrect, display message
+        if not user or not user.check_password(password):
+            raise ValidationError("Email or password is incorrect")
 
 
 
 class RegistrationForm(FlaskForm):
-    email = StringField('Email', validators=[DataRequired(),Email()])
-    username = StringField('Username', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired(),
-                            EqualTo('pass_confirm',
-                            message='Passwords must match!')])
-    pass_confirm = PasswordField('Confirm Password', validators=[DataRequired()])
+
+    min, max = User.email_min_len, User.email_min_len
+    email = StringField('Email', validators=[InputRequired(),
+                        Email(message="Invalid email"),
+                        Length(min=min, max=max,
+                        message=f"Email must be between {min} and {max} characters")])
+
+    min, max = User.username_min_len, User.username_max_len
+    username = StringField('Username', validators=[InputRequired(),
+                        Length(min=min, max=max,
+                        message=f"Username must be between {min} and {max} characters")])
+
+    min, max = User.pass_min_len, User.pass_max_len
+    password = PasswordField('Password', validators=[InputRequired(),
+                        EqualTo('pass_confirm',message='Passwords must match!'),
+                        Length(min=min, max=max,
+                        message=f"Password must be between {min} and {max} characters")])
+
+    pass_confirm = PasswordField('Confirm Password', validators=[InputRequired(),
+                        Length(min=min, max=max,
+                        message=f"Password must be between {min} and {max} characters")])
+
     submit = SubmitField("Register")
 
     def validate_email(self,field):
