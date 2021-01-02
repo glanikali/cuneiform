@@ -40,27 +40,27 @@ class LoginForm(FlaskForm):
 
 
 class RegistrationForm(FlaskForm):
-
-    min, max = User.email_min_len, User.email_min_len
+    len_err_msg = lambda x,min,max :f"{x} must be between {min} and {max} characters"
+    min, max = User.email_min_len, User.email_max_len
     email = StringField('Email', validators=[InputRequired(),
                         Email(message="Invalid email"),
                         Length(min=min, max=max,
-                        message=f"Email must be between {min} and {max} characters")])
+                        message=len_err_msg('Email',min,max))])
 
     min, max = User.username_min_len, User.username_max_len
     username = StringField('Username', validators=[InputRequired(),
                         Length(min=min, max=max,
-                        message=f"Username must be between {min} and {max} characters")])
+                        message=len_err_msg('Username',min,max))])
 
     min, max = User.pass_min_len, User.pass_max_len
     password = PasswordField('Password', validators=[InputRequired(),
                         EqualTo('pass_confirm',message='Passwords must match!'),
                         Length(min=min, max=max,
-                        message=f"Password must be between {min} and {max} characters")])
+                        message=len_err_msg('Password',min,max))])
 
     pass_confirm = PasswordField('Confirm Password', validators=[InputRequired(),
                         Length(min=min, max=max,
-                        message=f"Password must be between {min} and {max} characters")])
+                        message=len_err_msg('Password',min,max))])
 
     submit = SubmitField("Register")
 
