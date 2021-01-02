@@ -2,7 +2,7 @@
 
 from flask import (Blueprint, render_template, redirect,
                     url_for,request,flash,abort)
-from flask_login import login_user, login_required, logout_user
+from flask_login import login_user, login_required, logout_user, current_user
 from cuneiform import db,app
 from cuneiform.models import User
 from cuneiform.users.forms import LoginForm, RegistrationForm
@@ -26,22 +26,24 @@ def logout():
     return redirect(url_for('index'))
 
 # TO DO, if user logs in but user doesn't exist no message is passed
-@users_blueprint.route('login', methods=['GET','POST'])
+@users_blueprint.route('/login', methods=['GET','POST'])
 def login():
     form = LoginForm()
+
     if form.validate_on_submit():
+        # Grab the user
         user = User.query.filter_by(email=form.email.data).first()
-        # Check password and username provided
-        if user is not None and user.check_password(form.password.data):
-            login_user(user)
-            flash('Logged in Successfully!')
-            # Handle if user was trying to access a restricted page
-            next = request.args.get('next')
+        #Log in the user
+        login_user(user)
+        flash('Logged in Successfully!')
+        print(f"User id is {current_user.id}")
+        # Handle if user was trying to access a restricted page
+        next = request.args.get('next')
 
-            if next == None or not next[0] == '/':
-                next = url_for('index')
+        if next == None or not next[0] == '/':
+            next = url_for('index')
 
-            return redirect(next)
+        return redirect(next)
 
     return render_template('login.html.j2', form=form)
 
@@ -51,19 +53,13 @@ def register():
     form = RegistrationForm()
 
     if form.validate_on_submit():
-        try:
-            user = User(email=form.email.data,
-                        username=form.username.data,
-                        password=form.password.data)
-            db.session.add(user)
-            db.session.commit()
-            flash("Thanks for registration!")
-            return redirect(url_for('users.login'))
-
-        # if username or email are not unique
-        except IntegrityError:
-            db.session.rollback()
-            flash("User or Email already exists")
+        user = User(email=form.email.data,
+                    username=form.username.data,
+                    password=form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash("Thanks for registration!")
+        return redirect(url_for('users.login'))
 
     return render_template('register.html.j2', form=form)
 #

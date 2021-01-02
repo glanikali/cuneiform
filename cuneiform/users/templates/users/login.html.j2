@@ -1,4 +1,6 @@
 {% extends "base.html.j2" %}
+{% from 'field_macro.html.j2' import render_field %}
+
 
 {% block title %} Login  {% endblock %}
 
@@ -7,8 +9,8 @@
 <form method="POST">
     {# This hidden_tag is a CSRF security feature. #}
     {{ form.hidden_tag() }}
-    {{ form.email.label }} {{ form.email() }}
-    {{ form.password.label }} {{ form.password() }}
+    {{ render_field(form.email) }}<br><br>
+    {{ render_field(form.password) }}<br>
     {{ form.submit() }}
 </form>
 </div>
