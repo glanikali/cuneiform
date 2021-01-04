@@ -1,12 +1,5 @@
-# app.py
+from cuneiform import create_app
 
-from cuneiform import app
-from flask import render_template
-
-@app.route('/')
-def index():
-    return render_template('home.html.j2')
-
-
-if __name__ == '__main__':
-    app.run(debug=True)
+# Call the application factory function to construct a Flask application
+# instance using the development configuration
+app = create_app('flask.cfg')

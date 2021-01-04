@@ -17,7 +17,7 @@ class AddForm(FlaskForm):
     #is_bought = BooleanField('Purchased')
     #user_id = IntegerField('Created by User: ')
     submit = SubmitField('Add Item')
-    
+
 
 
 
@@ -25,12 +25,17 @@ class AddForm(FlaskForm):
     #household id? TO DO
 
 
-# TO DO!!!!!!!!!!!!!!!!!!!!!!!
-# When i run inspect / change the user id, it doesn't work?
 class UpdateForm(FlaskForm):
 
     # following field is hidden in the template
     id = IntegerField('Id of Item to Buy:', validators=[DataRequired()])
+    min, max = Item.name_min_len, Item.name_max_len
+    name = StringField('Name of Item:', validators=[InputRequired(message="Name required"),
+                                        Length(min=min, max=max,
+                                        message=f"Name must be between {min} and {max} characters")])
+    is_bought = BooleanField('Is Bought', default="checked")
+    submit = SubmitField('Update')
+
     def validate_id(self,field):
         id = field.data
         user = current_user
@@ -45,12 +50,14 @@ class UpdateForm(FlaskForm):
 
 
 
-#shold i call this buy grocery? TO DO
-class UpdateNameForm(UpdateForm, AddForm):
-    submit = SubmitField('Update')
-
-
-class UpdateStatusForm(UpdateForm):
-
-    #name = StringField('Name of Item:')
-    is_bought = SubmitField('Mark as Bought')
+# #shold i call this buy grocery? TO DO
+# class UpdateNameForm(UpdateForm, AddForm):
+#     is_bought = BooleanField('Is Bought')
+#     submit = SubmitField('Update')
+#
+#
+# class UpdateStatusForm(UpdateForm, AddForm):
+#
+#     #name = StringField('Name of Item:')
+#     is_bought = BooleanField('Is Bought', default="checked")
+#     submit = SubmitField('Mark as Bought')

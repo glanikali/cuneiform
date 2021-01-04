@@ -1,16 +1,15 @@
 # cuneiform/users/view.py
 
 from flask import (Blueprint, render_template, redirect,
-                    url_for,request,flash,abort)
+                    url_for,request,flash,abort, session)
 from flask_login import login_user, login_required, logout_user, current_user
-from cuneiform import db,app
+from cuneiform import db#,app
 from cuneiform.models import User
 from cuneiform.users.forms import LoginForm, RegistrationForm
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.exc import IntegrityError
 
-users_blueprint = Blueprint('users', __name__,
-                            template_folder='templates/users')
+from . import users_blueprint
 
 
 @users_blueprint.route('/welcome')
@@ -23,7 +22,7 @@ def welcome_user():
 def logout():
     logout_user()
     flash("You logged out!")
-    return redirect(url_for('index'))
+    return redirect(url_for('recipes.index'))
 
 # TO DO, if user logs in but user doesn't exist no message is passed
 @users_blueprint.route('/login', methods=['GET','POST'])
@@ -41,14 +40,21 @@ def login():
         next = request.args.get('next')
 
         if next == None or not next[0] == '/':
-            next = url_for('index')
+            next = url_for('recipes.index')
 
         return redirect(next)
 
-    return render_template('login.html.j2', form=form)
+    return render_template('users/login.html.j2', form=form)
 
 # if email is incorrect format no message provided
-@users_blueprint.route('/register', methods=['GET', 'POST'])
+@users_blueprint.route('/register', methods=['GET'])
+def show_registration():
+    form = RegistrationForm()
+
+    return render_template('users/register.html.j2', form=form)
+
+# if email is incorrect format no message provided
+@users_blueprint.route('/register', methods=['POST'])
 def register():
     form = RegistrationForm()
 
@@ -61,29 +67,8 @@ def register():
         flash("Thanks for registration!")
         return redirect(url_for('users.login'))
 
-    return render_template('register.html.j2', form=form)
-#
-# @users_blueprint.route('/add', methods=['GET', 'POST'])
-# def add():
-#
-#     form = AddForm()
-#
-#     if form.validate_on_submit():
-#         name = form.name.data
-#         #household_id = form.household_id_id.data
-#         #email/password
-#         # Add new user to database
-#         new_user = User(name) #,household_id)
-#         db.session.add(new_user)
-#         db.session.commit()
-#
-#         return redirect(url_for('users.list'))
-#
-#     return render_template('add_user.html.j2',form=form)
-#
-#
-# @users_blueprint.route('/list')
-# def list():
-#     # Grab a list of puppies from database.
-#     users = User.query.all()
-#     return render_template('list_users.html.j2', users=users)
+    # if form.is_submitted() and not form.validate():
+    #     session['formdata'] = request.form
+    #     return redirect(url_for('users.show_registration'))
+
+    return (render_template('users/register.html.j2', form=form), 422)

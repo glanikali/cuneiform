@@ -46,11 +46,14 @@
 
                 <form action="{{url_for('items.update',id=item.id)}}" method="POST">
                   {# This hidden_tag is a CSRF security feature. #}
-                  {{ update_status_form.hidden_tag() }}
+                  {{ update_form.hidden_tag() }}
                   <div class="form-group">
-                    {{ update_status_form.id(value=item.id, type="hidden")}}
-                    {{ update_status_form.is_bought(class="btn btn-danger btn-xs",
-                      onclick="return confirm('Are You Sure To Delete ?')" ) }}
+                    {{ update_form.id(value=item.id, type="hidden")}}
+                    {{ update_form.name(value=item.name, type="hidden") }}
+                    {{ update_form.is_bought(type="hidden")}}
+                    {{ update_form.submit(class="btn btn-danger btn-xs",
+                      onclick="return confirm('Are You Sure To Delete ?')" ,
+                      value="Mark as Bought")}}
                   </div>
                 </form>
 
@@ -67,13 +70,14 @@
                 <div class="modal-body">
                   <form action="{{url_for('items.update',id=item.id)}}" method="POST">
                     {# This hidden_tag is a CSRF security feature. #}
-                    {{ update_name_form.hidden_tag() }}
+                    {{ update_form.hidden_tag() }}
                     <div class="form-group">
-                      {{ update_name_form.id(value=item.id, type="hidden")}}
-                      {{ update_name_form.name.label }} {{ update_name_form.name(class="form-control",value=item.name) }}
+                      {{ update_form.id(value=item.id, type="hidden")}}
+                      {{ update_form.is_bought(value=false, type="hidden")}}
+                      {{ update_form.name.label }} {{ update_form.name(class="form-control",value=item.name) }}
                     </div>
                     <div class="form-group">
-                      {{ update_name_form.submit(class="btn btn-primary") }}
+                      {{ update_form.submit(class="btn btn-primary") }}
                     </div>
                   </form>
                 </div>

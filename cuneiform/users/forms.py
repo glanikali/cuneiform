@@ -71,9 +71,3 @@ class RegistrationForm(FlaskForm):
     def validate_username(self,field):
         if User.query.filter_by(username=field.data).first():
             raise ValidationError('Username is taken!')
-
-# class AddForm(FlaskForm):
-#
-#     name = StringField('Name of User:')
-#     #TO DO household = IntegerField('Household ID:')
-#     submit = SubmitField('Add User')
