@@ -1,5 +1,4 @@
 # __init__.py for cuneiform
-
 import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy

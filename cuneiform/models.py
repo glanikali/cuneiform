@@ -36,7 +36,14 @@ class User(db.Model,UserMixin):
 
     def check_password(self,password):
         return check_password_hash(self.password_hash,password)
+    
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
 
+    def get_id(self):
+        """Return the user ID as a unicode string (`str`)."""
+        return str(self.id)
+        
     def __repr__(self):
         return f"User Name: {self.username}    User Id: {self.id}"
 

@@ -25,3 +25,29 @@ flask db migrate -m "message"
 	- https://www.youtube.com/watch?v=CxCK1DkikgA&ab_channel=PrettyPrinted
 
 flask db upgrade
+
+
+
+Testing:
+
+To run the test, run 
+```
+python -m pytest tests/
+```
+from the root directory of the project
+
+
+
+
+Set the file that contains the Flask application and specify that the development environment should be used:
+
+```sh
+(venv) $ export FLASK_APP=app.py
+(venv) $ export FLASK_ENV=development
+```
+
+Run development server to serve the Flask application:
+
+```sh
+(venv) $ flask run
+```

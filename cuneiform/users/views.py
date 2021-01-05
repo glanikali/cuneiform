@@ -25,6 +25,12 @@ def logout():
     return redirect(url_for('recipes.index'))
 
 # TO DO, if user logs in but user doesn't exist no message is passed
+@users_blueprint.route('/login', methods=['GET'])
+def show_login():
+    form = LoginForm()
+    return render_template('users/login.html.j2', form=form)
+
+# TO DO, if user logs in but user doesn't exist no message is passed
 @users_blueprint.route('/login', methods=['GET','POST'])
 def login():
     form = LoginForm()
@@ -44,7 +50,7 @@ def login():
 
         return redirect(next)
 
-    return render_template('users/login.html.j2', form=form)
+    return (render_template('users/login.html.j2', form=form), 400)
 
 # if email is incorrect format no message provided
 @users_blueprint.route('/register', methods=['GET'])
@@ -65,7 +71,7 @@ def register():
         db.session.add(user)
         db.session.commit()
         flash("Thanks for registration!")
-        return redirect(url_for('users.login'))
+        return redirect(url_for('users.show_login'))
 
     # if form.is_submitted() and not form.validate():
     #     session['formdata'] = request.form
