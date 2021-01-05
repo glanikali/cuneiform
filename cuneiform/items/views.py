@@ -120,7 +120,7 @@ def update(id):
     #item = Item.query.get(request.form.get('id'))
 
     #item.is_bought = True
-    
+
 
 
     return redirect(url_for('items.index'))
