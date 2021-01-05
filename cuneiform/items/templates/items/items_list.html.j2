@@ -28,66 +28,71 @@
         {% endif %}
         {% endwith %}
         <table class="table table-hover table-dark">
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Is Bought</th>
-            <th>Requested By</th>
-            <th>Action</th>
-          </tr>
-          {% for user,item in items %}
-          <tr>
-            <td>{{item.id}}</td>
-            <td>{{item.name}}</td>
-            <td>{{item.is_bought}}</td>
-            <td>{{user.username}}</td>
-            <td>
-              <a href="#" class="btn btn-warning btn-xs" data-bs-toggle="modal" data-bs-target="#modaledit{{item.id}}">Edit</a>
+          <div class="table-responsive">
+            <table class = "table align-middle">
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Is Bought</th>
+                <th>Requested By</th>
+                <th>Action</th>
+              </tr>
+              {% for user,item in items %}
+              <tr>
+                <td>{{item.id}}</td>
+                <td>{{item.name}}</td>
+                <td>{{item.is_bought}}</td>
+                <td>{{user.username}}</td>
+                <td>
+                  <div class="d-flex">
+                    <a href="#" class="btn btn-warning btn-xs me-3" data-bs-toggle="modal" data-bs-target="#modaledit{{item.id}}">Edit</a>
 
-                <form action="{{url_for('items.update',id=item.id)}}" method="POST">
-                  {# This hidden_tag is a CSRF security feature. #}
-                  {{ update_form.hidden_tag() }}
-                  <div class="form-group">
-                    {{ update_form.id(value=item.id, type="hidden")}}
-                    {{ update_form.name(value=item.name, type="hidden") }}
-                    {{ update_form.is_bought(type="hidden")}}
-                    {{ update_form.submit(class="btn btn-danger btn-xs",
-                      onclick="return confirm('Are You Sure To Delete ?')" ,
-                      value="Mark as Bought")}}
+                      <form action="{{url_for('items.update',id=item.id)}}" method="POST">
+                        {# This hidden_tag is a CSRF security feature. #}
+                        {{ update_form.hidden_tag() }}
+                        <div class="form-group">
+                          {{ update_form.id(value=item.id, type="hidden")}}
+                          {{ update_form.name(value=item.name, type="hidden") }}
+                          {{ update_form.is_bought(type="hidden")}}
+                          {{ update_form.submit(class="btn btn-danger btn-xs",
+                            onclick="return confirm('Are You Sure To Delete ?')" ,
+                            value="Mark as Bought")}}
+                        </div>
+                      </form>
+                    </div>
+
+                </td>
+              </tr>
+
+              <div class="modal fade" id="modaledit{{item.id}}" data-bs-backdrop="static" role="dialog">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h4 class="modal-title">Update Information</h4>
+                    </div>
+                    <div class="modal-body">
+                      <form action="{{url_for('items.update',id=item.id)}}" method="POST">
+                        {# This hidden_tag is a CSRF security feature. #}
+                        {{ update_form.hidden_tag() }}
+                        <div class="form-group">
+                          {{ update_form.id(value=item.id, type="hidden")}}
+                          {{ update_form.is_bought(value=false, type="hidden")}}
+                          {{ update_form.name.label }} {{ update_form.name(class="form-control",value=item.name) }}
+                        </div>
+                        <div class="form-group">
+                          {{ update_form.submit(class="btn btn-primary") }}
+                        </div>
+                      </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
                   </div>
-                </form>
-
-
-            </td>
-          </tr>
-
-          <div class="modal fade" id="modaledit{{item.id}}" data-bs-backdrop="static" role="dialog">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h4 class="modal-title">Update Information</h4>
-                </div>
-                <div class="modal-body">
-                  <form action="{{url_for('items.update',id=item.id)}}" method="POST">
-                    {# This hidden_tag is a CSRF security feature. #}
-                    {{ update_form.hidden_tag() }}
-                    <div class="form-group">
-                      {{ update_form.id(value=item.id, type="hidden")}}
-                      {{ update_form.is_bought(value=false, type="hidden")}}
-                      {{ update_form.name.label }} {{ update_form.name(class="form-control",value=item.name) }}
-                    </div>
-                    <div class="form-group">
-                      {{ update_form.submit(class="btn btn-primary") }}
-                    </div>
-                  </form>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
               </div>
-            </div>
+              {% endfor %}
+            </table>
           </div>
-          {% endfor %}
         </table>
       </div>
 
