@@ -3,7 +3,7 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash
 from cuneiform import db, login_manager
 from cuneiform.models import Item, User
-from cuneiform.items.forms import AddForm, UpdateForm
+from cuneiform.items.forms import AddForm, UpdateForm, UploadForm
 from flask_login import current_user, login_required
 from . import items_blueprint
 
@@ -46,7 +46,26 @@ def store():
 
     return redirect(url_for('items.index'))
 
+#POST /items
+@items_blueprint.route('', methods=['POST'])
+@login_required
+def store_many():
+    # TO DO -> parse incoming request into some kind of object
+    # Then validate the request (rules for validation) -> regex or alternative
+    #
+    add_form = AddForm()
+    if add_form.validate_on_submit():
+        name = request.form['name']
+        #is_bought = request.form['is_bought']
+        user_id = current_user.id
+        # Add new item to database
+        new_item = Item(name,user_id)
+        db.session.add(new_item)
+        db.session.commit()
 
+    flash_errors(add_form)
+
+    return redirect(url_for('items.index'))
 
 @items_blueprint.route('')
 @login_required
@@ -56,10 +75,12 @@ def index():
     #update_name_form = UpdateNameForm()
     #update_status_form = UpdateStatusForm()
     update_form = UpdateForm()
+    upload_form = UploadForm()
     #items = Item.query.filter_by(user_id=current_user.id)
     items = db.session.query(User,Item).filter(User.id == Item.user_id,Item.user_id==current_user.id).all()
     return render_template('items/items_list.html.j2', items=items,
-                            add_form=add_form, update_form=update_form)
+                            add_form=add_form, update_form=update_form,
+                            upload_form=upload_form)
 
 
 

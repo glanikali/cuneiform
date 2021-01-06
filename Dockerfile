@@ -3,10 +3,10 @@ FROM python:3.7.9-buster
 ENV FLASK_APP app.py
 ENV FLASK_CONFIG development
 
-RUN adduser -D flasky
-USER flasky
+RUN adduser -D cuneiform
+USER cuneiform
 
-WORKDIR /home/flasky
+WORKDIR /home/cuneiform
 
 COPY requirements requirements
 RUN python -m venv venv

@@ -14,6 +14,9 @@
           <button type="button"  class="btn btn-success float-right" data-bs-toggle="modal" data-bs-target="#mymodal">
             Add New Items
           </button>
+          <button type="button"  class="btn btn-success float-right" data-bs-toggle="modal" data-bs-target="#mymodal2">
+            Upload Image
+          </button>
         </h2>
         {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -44,18 +47,18 @@
             <td>
               <a href="#" class="btn btn-warning btn-xs" data-bs-toggle="modal" data-bs-target="#modaledit{{item.id}}">Edit</a>
 
-                <form action="{{url_for('items.update',id=item.id)}}" method="POST">
-                  {# This hidden_tag is a CSRF security feature. #}
-                  {{ update_form.hidden_tag() }}
-                  <div class="form-group">
-                    {{ update_form.id(value=item.id, type="hidden")}}
-                    {{ update_form.name(value=item.name, type="hidden") }}
-                    {{ update_form.is_bought(type="hidden")}}
-                    {{ update_form.submit(class="btn btn-danger btn-xs",
-                      onclick="return confirm('Are You Sure To Delete ?')" ,
-                      value="Mark as Bought")}}
-                  </div>
-                </form>
+              <form action="{{url_for('items.update',id=item.id)}}" method="POST">
+                {# This hidden_tag is a CSRF security feature. #}
+                {{ update_form.hidden_tag() }}
+                <div class="form-group">
+                  {{ update_form.id(value=item.id, type="hidden")}}
+                  {{ update_form.name(value=item.name, type="hidden") }}
+                  {{ update_form.is_bought(type="hidden")}}
+                  {{ update_form.submit(class="btn btn-danger btn-xs",
+                    onclick="return confirm('Are You Sure To Delete ?')" ,
+                    value="Mark as Bought")}}
+                </div>
+              </form>
 
 
             </td>
@@ -116,6 +119,32 @@
           </div>
         </div>
       </div>
+
+      <div id="mymodal2" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Upload List</h4>
+            </div>
+            <div class="modal-body">
+              <form action="{{url_for('items.store_many')}}" method="POST" enctype="multipart/form-data">
+                {# This hidden_tag is a CSRF security feature. #}
+                {{ add_form.hidden_tag() }}
+                <div class="form-group">
+                  {{ upload_form.image(class="form-control")}}
+                </div>
+                <div class="form-group">
+                  <button type="submit" class="btn btn-primary">Upload</button>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>

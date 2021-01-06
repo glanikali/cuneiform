@@ -1,12 +1,13 @@
 #forms.py items
 from cuneiform.models import Item
-
 from flask import flash
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, SubmitField, BooleanField, ValidationError
 from wtforms.widgets import HiddenInput
 from wtforms.validators import InputRequired, DataRequired, Length
 from flask_login import current_user
+from flask_wtf.file import FileField, FileAllowed, FileRequired
+from flask_uploads import UploadSet, IMAGES
 
 class AddForm(FlaskForm):
 
@@ -49,15 +50,9 @@ class UpdateForm(FlaskForm):
         print(f"user id {user.id}, item id {item.id}")
 
 
-
-# #shold i call this buy grocery? TO DO
-# class UpdateNameForm(UpdateForm, AddForm):
-#     is_bought = BooleanField('Is Bought')
-#     submit = SubmitField('Update')
-#
-#
-# class UpdateStatusForm(UpdateForm, AddForm):
-#
-#     #name = StringField('Name of Item:')
-#     is_bought = BooleanField('Is Bought', default="checked")
-#     submit = SubmitField('Mark as Bought')
+images = UploadSet('images', IMAGES)
+class UploadForm(FlaskForm):
+    image = FileField('Image', validators=[
+    FileRequired(),
+    FileAllowed(images, 'Images only!')
+    ])
