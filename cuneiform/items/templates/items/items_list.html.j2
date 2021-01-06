@@ -134,7 +134,7 @@
             <div class="modal-body">
               <form action="{{url_for('items.store_many')}}" method="POST" enctype="multipart/form-data">
                 {# This hidden_tag is a CSRF security feature. #}
-                {{ add_form.hidden_tag() }}
+                {{ upload_form.hidden_tag() }}
                 <div class="form-group">
                   {{ upload_form.image(class="form-control")}}
                 </div>

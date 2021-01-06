@@ -3,5 +3,9 @@
         "**/__pycache__" : true,
         "**/.pytest_cache" : true
     },
-    "python.linting.enabled": true
+    "python.linting.enabled": true,
+    "python.formatting.provider": "black",
+    "[python]": {
+        "editor.formatOnSave": true
+    }
 }

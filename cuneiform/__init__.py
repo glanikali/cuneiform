@@ -4,6 +4,9 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
+from flask_injector import FlaskInjector
+from injector import inject
+from cuneiform.dependencies import configure
 
 #######################
 #### Configuration ####
@@ -14,10 +17,9 @@ from flask_login import LoginManager
 # to the application at this point.
 
 db = SQLAlchemy()
-#bcrypt = Bcrypt()
+# bcrypt = Bcrypt()
 login_manager = LoginManager()
 login_manager.login_view = "users.login"
-
 
 
 # db = SQLAlchemy(app)
@@ -29,16 +31,17 @@ login_manager.login_view = "users.login"
 # Register Blueprints (modularization for scaling, more semantic)
 
 
-
 ######################################
 #### Application Factory Function ####
 ######################################
+
 
 def create_app(config_filename=None):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_pyfile(config_filename)
     initialize_extensions(app)
     register_blueprints(app)
+    FlaskInjector(app=app, modules=[configure])
     return app
 
 
@@ -46,18 +49,18 @@ def create_app(config_filename=None):
 #### Helper Functions ####
 ##########################
 
+
 def initialize_extensions(app):
     # Since the application instance is now created, pass it to each Flask
     # extension instance to bind it to the Flask application instance (app)
-    #db.init_app(app)
-    #db = SQLAlchemy(app)
+    # db.init_app(app)
+    # db = SQLAlchemy(app)
     db.init_app(app)
-    Migrate(app,db)
+    Migrate(app, db)
     login_manager.init_app(app)
 
     # Flask-Login configuration
-    #from cuneiform.models import User
-
+    # from cuneiform.models import User
 
 
 def register_blueprints(app):
@@ -68,5 +71,5 @@ def register_blueprints(app):
     from cuneiform.recipes import recipes_blueprint
 
     app.register_blueprint(recipes_blueprint)
-    app.register_blueprint(users_blueprint, url_prefix='/users')
-    app.register_blueprint(items_blueprint, url_prefix='/items')
+    app.register_blueprint(users_blueprint, url_prefix="/users")
+    app.register_blueprint(items_blueprint, url_prefix="/items")

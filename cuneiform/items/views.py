@@ -1,14 +1,22 @@
 # cuneiform/users/items.py
 
-from flask import Blueprint, render_template, redirect, url_for, request, flash
-from cuneiform import db, login_manager
+from flask import render_template, redirect, url_for, request, flash
+from cuneiform import db
 from cuneiform.models import Item, User
 from cuneiform.items.forms import AddForm, UpdateForm, UploadForm
 from flask_login import current_user, login_required
 from . import items_blueprint
+from flask_uploads import configure_uploads, IMAGES, UploadSet
+from cuneiform.services.ocrservice import OcrService
+import requests
+from flask_injector import FlaskInjector
+from injector import inject
+from cuneiform.dependencies import configure
 
+# from ocrservice import worker
 
-# work around for providing user feedback, as CSS modal fade class doesn't display the raised validation errors
+# work around for providing user feedback, as CSS modal fade class
+# doesn't display the raised validation errors
 def flash_errors(form):
     """Flashes form errors"""
     for errors in form.errors.items():
@@ -48,23 +56,30 @@ def store():
 
 
 # POST /items
-@items_blueprint.route("", methods=["POST"])
+@inject
+@items_blueprint.route("/storemany", methods=["POST"])
 @login_required
-def store_many():
+def store_many(service: OcrService):
     # TO DO -> parse incoming request into some kind of object
     # Then validate the request (rules for validation) -> regex or alternative
     #
-    add_form = AddForm()
-    if add_form.validate_on_submit():
-        name = request.form["name"]
-        # is_bought = request.form['is_bought']
-        user_id = current_user.id
-        # Add new item to database
-        new_item = Item(name, user_id)
-        db.session.add(new_item)
-        db.session.commit()
+    upload_form = UploadForm()
+    print("validating form")
+    # if upload_form.validate_on_submit():
+    image = upload_form.image.data.read()
+    # s = requests.Session()
+    # service(s)
+    service.worker(image)
+    # print(image)
+    # worker(image)
+    # is_bought = request.form['is_bought']
+    # user_id = current_user.id
+    # Add new item to database
+    # new_item = Item(name, user_id)
+    # db.session.add(new_item)
+    # db.session.commit()
 
-    flash_errors(add_form)
+    flash_errors(upload_form)
 
     return redirect(url_for("items.index"))
 
@@ -115,15 +130,18 @@ def update(id):
     #
     # is_update_status, is_update_name = False, False
     # # check if the form label names are found in the request form
-    # check_fields = [request.form.get(field.name) for field in update_status_form]
+    # check_fields = [request.form.get(field.name) for field in /
+    # update_status_form]
     # is_update_status = not None in check_fields
     #
-    # check_fields = [request.form.get(field.name) for field in update_name_form]
+    # check_fields = [request.form.get(field.name) for field in /
+    #  update_name_form]
     # is_update_name = not None in check_fields
 
     # if is_update_status and
     if update_form.validate_on_submit():
-        # if 'is_bought' in request.form and update_status_form.validate_on_submit():
+        # if 'is_bought' in request.form and /
+        # update_status_form.validate_on_submit():
         # print("setting bought")
         # print(request.form)
         item.name = request.form["name"]

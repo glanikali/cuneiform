@@ -38,6 +38,7 @@ __pycache__/
 # Environment #
 ###############
 *.env
+*settings.json
 
 # Misc  #
 ###############
