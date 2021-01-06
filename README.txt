@@ -51,3 +51,13 @@ Run development server to serve the Flask application:
 ```sh
 (venv) $ flask run
 ```
+
+Docker Build Command:
+```
+docker build -t cuneiform .
+```
+
+Docker run command:
+```
+docker run -d -p 5000:5000 cuneiform
+```
