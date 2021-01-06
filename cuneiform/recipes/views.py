@@ -12,6 +12,6 @@ from . import recipes_blueprint
 ################
 
 
-@recipes_blueprint.route('/')
+@recipes_blueprint.route("/")
 def index():
-    return render_template('recipes/home.html.j2')
+    return render_template("recipes/home.html.j2")
