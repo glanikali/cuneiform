@@ -3,6 +3,7 @@ from binascii import b2a_base64
 import json
 import requests
 from injector import inject
+import os
 
 
 class OcrService:
@@ -36,8 +37,8 @@ class OcrService:
         )
 
     def send_request(self, json_dict):
-        mykey = "AIzaSyAtLkPibiWLSNvanh5s7WzNQP9qPeBnCn0"
         url = f"https://vision.googleapis.com/v1/images:annotate"
+        mykey = os.environ.get("GOOGLE_API_KEY")
         data = {"key": mykey}
         req = requests.Request(
             "POST", url, headers={"X-Custom": "Test"}, params=data, json=json_dict
