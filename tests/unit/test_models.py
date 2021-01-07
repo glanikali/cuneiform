@@ -10,10 +10,10 @@ def test_new_user():
     WHEN a new User is created
     THEN check the email, password_hash, authenticated, and role fields are defined correctly
     """
-    user = User('ishan@gmail.com', 'ishan', 'FlaskIsAwesome')
-    assert user.email == 'ishan@gmail.com'
-    assert user.username == 'ishan'
-    assert user.password_hash != 'FlaskIsAwesome'
+    user = User("ishan@gmail.com", "ishan", "FlaskIsAwesome")
+    assert user.email == "ishan@gmail.com"
+    assert user.username == "ishan"
+    assert user.password_hash != "FlaskIsAwesome"
 
 
 def test_new_user_with_fixture(new_user):
@@ -22,9 +22,9 @@ def test_new_user_with_fixture(new_user):
     WHEN a new User is created
     THEN check the email, password_hash, authenticated, and role fields are defined correctly
     """
-    assert new_user.email == 'ishan@gmail.com'
-    assert new_user.password_hash != 'FlaskIsAwesome'
-    assert new_user.username == 'ishan'
+    assert new_user.email == "ishan@gmail.com"
+    assert new_user.password_hash != "FlaskIsAwesome"
+    assert new_user.username == "ishan"
 
 
 def test_setting_password(new_user):
@@ -33,11 +33,11 @@ def test_setting_password(new_user):
     WHEN the password for the user is set
     THEN check the password is stored correctly and not as plaintext
     """
-    new_user.set_password('MyNewPassword')
-    assert new_user.password_hash != 'MyNewPassword'
-    assert new_user.check_password('MyNewPassword')
-    assert not new_user.check_password('MyNewPassword2')
-    assert not new_user.check_password('FlaskIsAwesome')
+    new_user.set_password("MyNewPassword")
+    assert new_user.password_hash != "MyNewPassword"
+    assert new_user.check_password("MyNewPassword")
+    assert not new_user.check_password("MyNewPassword2")
+    assert not new_user.check_password("FlaskIsAwesome")
 
 
 def test_user_id(new_user):
@@ -49,4 +49,4 @@ def test_user_id(new_user):
     new_user.id = 17
     assert isinstance(new_user.get_id(), str)
     assert not isinstance(new_user.get_id(), int)
-    assert new_user.get_id() == '17'
+    assert new_user.get_id() == "17"
