@@ -1,8 +1,8 @@
 """
-This file (test_recipes.py) contains the functional tests for the `recipes` blueprint.
+This file (test_core.py) contains the functional tests for the `core` blueprint.
 
 These tests use GETs and POSTs to different URLs to check for the proper behavior
-of the `recipes` blueprint.
+of the `core` blueprint.
 """
 from cuneiform import create_app
 

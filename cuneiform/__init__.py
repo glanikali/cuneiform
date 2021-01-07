@@ -68,8 +68,10 @@ def register_blueprints(app):
     # with the Flask application instance (app)
     from cuneiform.items.views import items_blueprint
     from cuneiform.users.views import users_blueprint
-    from cuneiform.recipes import recipes_blueprint
+    from cuneiform.core import core_blueprint
+    from cuneiform.error_pages import errors_blueprint
 
-    app.register_blueprint(recipes_blueprint)
+    app.register_blueprint(core_blueprint)
+    app.register_blueprint(errors_blueprint)
     app.register_blueprint(users_blueprint, url_prefix="/users")
     app.register_blueprint(items_blueprint, url_prefix="/items")

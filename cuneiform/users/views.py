@@ -31,7 +31,7 @@ def welcome_user():
 def logout():
     logout_user()
     flash("You logged out!")
-    return redirect(url_for("recipes.index"))
+    return redirect(url_for("core.index"))
 
 
 # TO DO, if user logs in but user doesn't exist no message is passed
@@ -57,7 +57,7 @@ def login():
         next = request.args.get("next")
 
         if next == None or not next[0] == "/":
-            next = url_for("recipes.index")
+            next = url_for("core.index")
 
         return redirect(next)
 

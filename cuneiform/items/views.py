@@ -64,7 +64,7 @@ def store_many(service: OcrService):
     # Then validate the request (rules for validation) -> regex or alternative
     #
     upload_form = UploadForm()
-    print("validating form")
+    # print("validating form")
     if upload_form.validate_on_submit():
         image_file = upload_form.image.data
         # if image_file is None:
@@ -79,10 +79,10 @@ def store_many(service: OcrService):
             flash(service.err_code_to_message.get(err_code))
             return redirect(url_for("items.index"))
 
-        print(f"items list {items_list}")
-        print(f"err_code {err_code}")
+        # print(f"items list {items_list}")
+        # print(f"err_code {err_code}")
         user_id = current_user.id
-        print(f"user id is {user_id}")
+        # print(f"user id is {user_id}")
         # Add new item to database
         for item in items_list:
             name = item
@@ -94,10 +94,10 @@ def store_many(service: OcrService):
 
     flash_errors(upload_form)
 
-    return (redirect(url_for("items.index")), 422)  # image not provided
+    return redirect(url_for("items.index"))  # image not provided
 
 
-@items_blueprint.route("")
+@items_blueprint.route("", methods=["GET"])
 @login_required
 def index():
     # Grab a list of items from database.
@@ -109,7 +109,11 @@ def index():
     # items = Item.query.filter_by(user_id=current_user.id)
     items = (
         db.session.query(User, Item)
-        .filter(User.id == Item.user_id, Item.user_id == current_user.id)
+        .filter(
+            User.id == Item.user_id,
+            Item.user_id == current_user.id,
+            Item.is_bought == False,
+        )
         .all()
     )
     return render_template(
@@ -119,6 +123,22 @@ def index():
         update_form=update_form,
         upload_form=upload_form,
     )
+
+
+@items_blueprint.route("/purchases", methods=["GET"])
+@login_required
+def purchases():
+    # Grab a list of items from database.
+    items = (
+        db.session.query(User, Item)
+        .filter(
+            User.id == Item.user_id,
+            Item.user_id == current_user.id,
+            Item.is_bought == True,
+        )
+        .all()
+    )
+    return render_template("items/purchases_list.html.j2", items=items)
 
 
 # /items/edit
