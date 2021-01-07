@@ -34,14 +34,12 @@ def logout():
     return redirect(url_for("core.index"))
 
 
-# TO DO, if user logs in but user doesn't exist no message is passed
 @users_blueprint.route("/login", methods=["GET"])
 def show_login():
     form = LoginForm()
     return render_template("users/login.html.j2", form=form)
 
 
-# TO DO, if user logs in but user doesn't exist no message is passed
 @users_blueprint.route("/login", methods=["GET", "POST"])
 def login():
     form = LoginForm()
@@ -64,7 +62,6 @@ def login():
     return (render_template("users/login.html.j2", form=form), 400)
 
 
-# if email is incorrect format no message provided
 @users_blueprint.route("/register", methods=["GET"])
 def show_registration():
     form = RegistrationForm()
@@ -72,7 +69,6 @@ def show_registration():
     return render_template("users/register.html.j2", form=form)
 
 
-# if email is incorrect format no message provided
 @users_blueprint.route("/register", methods=["POST"])
 def register():
     form = RegistrationForm()
@@ -87,9 +83,5 @@ def register():
         db.session.commit()
         flash("Thanks for registration!")
         return redirect(url_for("users.show_login"))
-
-    # if form.is_submitted() and not form.validate():
-    #     session['formdata'] = request.form
-    #     return redirect(url_for('users.show_registration'))
 
     return (render_template("users/register.html.j2", form=form), 422)

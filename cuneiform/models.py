@@ -29,13 +29,13 @@ class User(db.Model, UserMixin):
     # TO DOhousehold_id = db.Column(db.Integer,db.ForeignKey('households.id'))
     groceries = db.relationship(
         "Item", backref="user", lazy="dynamic"
-    )  # one to many -> will be list
+    )  # one to many -> TO DO in future
 
     def __init__(self, email, username, password):
         self.email = email
         self.username = username
         self.password_hash = generate_password_hash(password)
-        # self.household_id = household_id
+        # self.household_id = household_id TO DO
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
@@ -60,10 +60,9 @@ class Item(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(name_max_len))
     is_bought = db.Column(db.Boolean)
-    # is_bought = db.Column(db.Boolean)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     # timestamp TO DO
-    # HouseholdF.K -> redundant, normalize?
+    # HouseholdF.K -> TO DO
 
     def __init__(self, name, user_id):
         self.name = name

@@ -19,14 +19,7 @@ class OcrService:
         self.err_code = None
 
     def pretty_print_POST(self, req):
-        """
-        At this point it is completely built and ready
-        to be fired; it is "prepared".
 
-        However pay attention at the formatting used in
-        this function because it is programmed to be pretty
-        printed and may differ from the actual request.
-        """
         print(
             "{}\n{}\r\n{}\r\n\r\n{}".format(
                 "-----------START-----------",
@@ -44,7 +37,6 @@ class OcrService:
             "POST", url, headers={"X-Custom": "Test"}, params=data, json=json_dict
         )
         prepared = req.prepare()
-        # pretty_print_POST(prepared)
 
         response = self.session.send(prepared)
         return response
@@ -96,10 +88,7 @@ class OcrService:
             print("Could not connect to google vision api")
             self.err_code = 1
             return None, self.err_code
-        # print(response.json())
-        # return response
         resp_json_dict = resp.json()
-        # print(resp_json_dict)
         if resp_json_dict == None:
             self.err_code = 2
             print("Issue processing image")
@@ -121,34 +110,9 @@ class OcrService:
             return None
         # Replace any special new line characters with a dash
         str_wo_nl = str.replace("\n", "-")
-        # print(str_wo_nl)
         # Split the string into a list, seperated by '-'
         str_ls = str_wo_nl.split("-")
-        # print(str_ls)
         # Filter out any empty strings from the list
         str_ls = list(filter(None, str_ls))
         str_ls = [str.strip() for str in str_ls]
         return str_ls
-        # print(str_ls)
-
-
-# def test_ocr():
-#     s = requests.Session()
-#     serv = OcrService(s)
-#     with open("C:/Users/ishan/Documents/Python/test_img_to_txt.png", "rb") as image:
-#         image_file = image.read()
-#         resp = serv.worker(image_file)
-#         resp_json_dict = resp.json()
-#         output_text = (
-#             resp_json_dict.get("responses")[0].get("fullTextAnnotation").get("text")
-#         )
-# json_dict =  json.loads(resp_json_str)
-
-
-# def test_read_image_base64():
-#     res = read_image_base64("C:/Users/ishan/Documents/Python/test_img_to_txt.png")
-#     print(res[0:10])
-#     assert res[0:10] == "iVBORw0KGg"
-
-# def ocr_service_test():
-#    mock_session =
