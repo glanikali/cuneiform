@@ -69,5 +69,11 @@ images = UploadSet("images", IMAGES)
 
 class UploadForm(FlaskForm):
     image = FileField(
-        "Image", validators=[FileRequired(), FileAllowed(images, "Images only!")]
+        "Image",
+        validators=[
+            FileRequired(),
+            FileAllowed(
+                ["jpg", "png", "jpeg"], "Images only (png, jpg and jpeg extensions)!"
+            ),
+        ],
     )

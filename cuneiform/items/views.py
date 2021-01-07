@@ -65,23 +65,36 @@ def store_many(service: OcrService):
     #
     upload_form = UploadForm()
     print("validating form")
-    # if upload_form.validate_on_submit():
-    image = upload_form.image.data.read()
-    # s = requests.Session()
-    # service(s)
-    service.worker(image)
-    # print(image)
-    # worker(image)
-    # is_bought = request.form['is_bought']
-    # user_id = current_user.id
-    # Add new item to database
-    # new_item = Item(name, user_id)
-    # db.session.add(new_item)
-    # db.session.commit()
+    if upload_form.validate_on_submit():
+        image_file = upload_form.image.data
+        # if image_file is None:
+        #    flash("Please upload an image only")
+        #    return redirect(url_for("items.index"))
+        image = image_file.read()
+        # s = requests.Session()
+        # service(s)
+        items_list, err_code = service.process_image(image)
+
+        if items_list == None:
+            flash(service.err_code_to_message.get(err_code))
+            return redirect(url_for("items.index"))
+
+        print(f"items list {items_list}")
+        print(f"err_code {err_code}")
+        user_id = current_user.id
+        print(f"user id is {user_id}")
+        # Add new item to database
+        for item in items_list:
+            name = item
+            new_item = Item(name, user_id)
+            db.session.add(new_item)
+            db.session.commit()
+
+        return redirect(url_for("items.index"))
 
     flash_errors(upload_form)
 
-    return redirect(url_for("items.index"))
+    return (redirect(url_for("items.index")), 422)  # image not provided
 
 
 @items_blueprint.route("")
